@@ -7,6 +7,7 @@
     <meta name="description" content="Convert PDF pages to high-quality JPG images with page range selection and quality control. 100% free, no uploads.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Base styles (reuse from index.html) */
         :root {
             --primary: #4361ee;
             --primary-light: #4895ef;
@@ -52,6 +53,65 @@
             background: #3a56d4;
             transform: translateY(-2px);
         }
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .btn-secondary:hover {
+            background: rgba(67,97,238,0.05);
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo-icon {
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .back-to-tools {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .back-to-tools:hover {
+            color: var(--accent);
+            transform: translateX(-3px);
+        }
+
+        /* Tool-specific styles */
         .converter-container {
             max-width: 800px;
             margin: 40px auto;
@@ -196,28 +256,97 @@
             color: var(--accent);
             cursor: pointer;
         }
+
+        /* Footer (matches homepage) */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+        .footer-links {
+            list-style: none;
+        }
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        .footer-links a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+        }
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: var(--transition);
+        }
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #a0aec0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
+    <!-- Header with Back Button -->
     <header>
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0;">
-            <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-                <div style="font-size: 28px; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent;">
+        <div class="container header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">
                     <i class="fas fa-tools"></i>
                 </div>
-                <div style="font-size: 24px; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent;">
-                    ToolKitPro
-                </div>
+                <div class="logo-text">ToolKitPro</div>
             </a>
-            <nav>
-                <ul style="display: flex; list-style: none; gap: 25px;">
-                    <li><a href="/" style="text-decoration: none; color: var(--dark); font-weight: 600;">Home</a></li>
-                    <li><a href="/tools" style="text-decoration: none; color: var(--dark); font-weight: 600;">Tools</a></li>
-                </ul>
-            </nav>
+            <a href="/tools" class="back-to-tools">
+                <i class="fas fa-arrow-left"></i> Back to Tools
+            </a>
         </div>
     </header>
 
+    <!-- Main Converter -->
     <main class="container">
         <section class="converter-container">
             <h1 style="text-align: center; margin-bottom: 10px;">PDF to JPG Converter</h1>
@@ -296,7 +425,7 @@
                         <button id="download-all" class="btn btn-primary">
                             <i class="fas fa-download"></i> Download All
                         </button>
-                        <button id="new-conversion" class="btn" style="margin-left: 10px; background: var(--gray);">
+                        <button id="new-conversion" class="btn btn-secondary" style="margin-left: 10px;">
                             <i class="fas fa-redo"></i> New Conversion
                         </button>
                     </div>
@@ -306,12 +435,59 @@
         </section>
     </main>
 
-    <footer style="background: var(--dark); color: white; padding: 40px 0; margin-top: 60px;">
+    <!-- Footer (matches homepage) -->
+    <footer>
         <div class="container">
-            <p style="text-align: center;">&copy; 2023 ToolKitPro. All rights reserved.</p>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ToolKitPro</h3>
+                    <p style="color: #cbd5e0; margin-bottom: 20px;">Your ultimate online toolkit for image and PDF processing.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/tools">All Tools</a></li>
+                        <li><a href="/features">Features</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/tutorials">Tutorials</a></li>
+                        <li><a href="/faq">FAQs</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 ToolKitPro. All rights reserved.
+            </div>
         </div>
     </footer>
 
+    <!-- Production Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
