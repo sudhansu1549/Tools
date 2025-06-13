@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PDF Protector | ToolKitPro</title>
+    <style>
+        .protection-options {
+            background: rgba(233,236,239,0.5);
+            padding: 20px;
+            border-radius: var(--rounded-md);
+            margin: 20px 0;
+        }
+        .permission-options {
+            margin-top: 15px;
+        }
+        .permission-options label {
+            display: block;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>...</header>
+
+    <main class="container">
+        <section class="converter-container">
+            <h1>PDF Protector</h1>
+            <p>Add passwords and permissions to your PDF files</p>
+
+            <div class="upload-area" id="upload-area">
+                <i class="fas fa-lock"></i>
+                <h3>Select PDF to Protect</h3>
+                <p>or click to browse</p>
+                <input type="file" id="file-input" accept=".pdf">
+            </div>
+
+            <div id="protection-options" class="protection-options hidden">
+                <h3><i class="fas fa-shield-alt"></i> Protection Settings</h3>
+                
+                <div style="margin: 15px 0;">
+                    <label>
+                        <input type="checkbox" id="user-password-check"> Require password to open
+                    </label>
+                    <input type="password" id="user-password" class="hidden" placeholder="Open password" style="margin-top: 5px; width: 100%; padding: 8px;">
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label>
+                        <input type="checkbox" id="owner-password-check"> Set owner password
+                    </label>
+                    <input type="password" id="owner-password" class="hidden" placeholder="Owner password (for permissions)" style="margin-top: 5px; width: 100%; padding: 8px;">
+                </div>
+
+                <div class="permission-options hidden" id="permission-options">
+                    <h4>Permissions:</h4>
+                    <label><input type="checkbox" name="permission" value="print"> Allow printing</label>
+                    <label><input type="checkbox" name="permission" value="modify"> Allow modifications</label>
+                    <label><input type="checkbox" name="permission" value="copy"> Allow copying text</label>
+                    <label><input type="checkbox" name="permission" value="annotate"> Allow annotations</label>
+                </div>
+
+                <button id="protect-btn" class="btn btn-primary" style="margin-top: 20px;">
+                    <i class="fas fa-lock"></i> Protect PDF
+                </button>
+            </div>
+
+            <div id="result" class="hidden" style="text-align: center;">
+                <h3><i class="fas fa-check-circle" style="color: var(--success);"></i> PDF Protected!</h3>
+                <a id="download-btn" class="btn btn-primary btn-lg">
+                    <i class="fas fa-download"></i> Download Protected PDF
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>...</footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const { PDFDocument } = PDFLib;
+            let pdfFile = null;
+
+            // Password checkbox toggles
+            document.getElementById('user-password-check').addEventListener('change', function() {
+                document.getElementById('user-password').classList.toggle('hidden', !this.checked);
+            });
+
+            document.getElementById('owner-password-check').addEventListener('change', function() {
+                const permOptions = document.getElementById('permission-options');
+                document.getElementById('owner-password').classList.toggle('hidden', !this.checked);
+                permOptions.classList.toggle('hidden', !this.checked);
+            });
+
+            // File handling (similar to previous examples)
+
+            document.getElementById('protect-btn').addEventListener('click', async function() {
+                const userPassword = document.getElementById('user-password-check').checked ? 
+                    document.getElementById('user-password').value : undefined;
+                
+                const ownerPassword = document.getElementById('owner-password-check').checked ? 
+                    document.getElementById('owner-password').value : undefined;
+
+                // Load PDF and apply protection
+                const pdfBytes = await pdfFile.arrayBuffer();
+                const pdfDoc = await PDFDocument.load(pdfBytes);
+                
+                // Set permissions
+                let permissions = {};
+                if (ownerPassword) {
+                    document.querySelectorAll('input[name="permission"]:checked').forEach(checkbox => {
+                        permissions[checkbox.value] = true;
+                    });
+                }
+
+                // Save with protection
+                const protectedPdfBytes = await pdfDoc.save({
+                    userPassword,
+                    ownerPassword,
+                    permissions
+                });
+
+                // Create download
+                const blob = new Blob([protectedPdfBytes], { type: 'application/pdf' });
+                document.getElementById('download-btn').href = URL.createObjectURL(blob);
+                document.getElementById('download-btn').download = 'protected-' + pdfFile.name;
+                document.getElementById('protection-options').classList.add('hidden');
+                document.getElementById('result').classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
